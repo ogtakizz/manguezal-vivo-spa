@@ -1,0 +1,778 @@
+/* ===== Design System ===== */
+:root {
+    /* Cores primárias */
+    --cor-primaria: #1d3d33;
+    /* fundo da página */
+    --cor-primaria-clara: #2f5d50;
+    /* header, footer */
+    --cor-superficie: #244a3e;
+    /* cartões e formulário */
+
+    /* Cores secundárias */
+    --cor-secundaria: #9fd8b8;
+    /* links e botões */
+    --cor-secundaria-escura: #3f6b5c;
+    /* bordas e divisórias */
+    --cor-destaque: #f2b950;
+    /* chamada para doação */
+
+    /* Neutras */
+    --cor-neutra-100: #f2f2f2;
+    /* texto principal */
+    --cor-neutra-200: #cfe3d8;
+    /* texto secundário, legendas */
+
+    /* Feedback */
+    --cor-erro: #ff9e9e;
+
+    /* Tipografia (escala modular de 1,25) */
+    --fonte-base: "Segoe UI", system-ui, sans-serif;
+    --fs-1: 0.8rem;
+    /* legendas */
+    --fs-2: 1rem;
+    /* texto base */
+    --fs-3: 1.25rem;
+    /* h3 */
+    --fs-4: 1.563rem;
+    /* h2 */
+    --fs-5: clamp(1.75rem, 4vw, 1.953rem);
+    /* h1, escala com a tela */
+
+    /* Espaçamentos (base de 8px) */
+    --esp-1: 0.25rem;
+    /* 4px */
+    --esp-2: 0.5rem;
+    /* 8px */
+    --esp-3: 1rem;
+    /* 16px */
+    --esp-4: 1.5rem;
+    /* 24px */
+    --esp-5: 2rem;
+    /* 32px */
+    --esp-6: 3rem;
+    /* 48px */
+    --esp-7: 4rem;
+    /* 64px */
+
+    /* Layout */
+    --largura-max: 1100px;
+    /* largura máxima do conteúdo */
+    --gap-grade: var(--esp-4);
+    /* espaço entre colunas do Grid */
+}
+
+/* ===== Base ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: var(--cor-primaria);
+    color: var(--cor-neutra-100);
+    font-family: var(--fonte-base);
+    font-size: var(--fs-2);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1 {
+    margin: 0;
+    font-size: var(--fs-5);
+}
+
+h2 {
+    margin: 0 0 var(--esp-2);
+    font-size: var(--fs-4);
+    text-transform: uppercase;
+}
+
+h3 {
+    margin: 0 0 var(--esp-2);
+    font-size: var(--fs-3);
+}
+
+p {
+    margin: 0 0 var(--esp-3);
+}
+
+a {
+    color: var(--cor-secundaria);
+}
+
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--cor-destaque);
+    outline-offset: 3px;
+}
+
+/* ===== Cabeçalho ===== */
+header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--esp-3);
+    padding: var(--esp-3);
+    background-color: var(--cor-primaria-clara);
+}
+
+header a {
+    text-decoration: none;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-3);
+}
+
+.marca h1 {
+    color: var(--cor-neutra-100);
+}
+
+/* ===== Menu: checkbox + label controlam o estado (sem JavaScript) ===== */
+.menu-toggle {
+    display: none;
+    /* o checkbox em si nunca aparece, em nenhuma largura */
+}
+
+.menu-hamburguer {
+    display: none;
+    width: 28px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.menu-hamburguer::before,
+.menu-hamburguer::after,
+.menu-hamburguer span {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--cor-neutra-100);
+}
+
+.menu-hamburguer::before {
+    top: 0;
+}
+
+.menu-hamburguer span {
+    top: 8.5px;
+}
+
+.menu-hamburguer::after {
+    bottom: 0;
+}
+
+nav {
+    width: 100%;
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--esp-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* item com submenu (dropdown) */
+.tem-submenu {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    margin: 0;
+    padding: var(--esp-2) 0;
+    background-color: var(--cor-superficie);
+    border: 1px solid var(--cor-secundaria-escura);
+    border-radius: var(--esp-1);
+    list-style: none;
+    z-index: 10;
+}
+
+/* :hover para mouse, :focus-within para navegação por teclado (Tab) */
+.tem-submenu:hover .submenu,
+.tem-submenu:focus-within .submenu {
+    display: flex;
+}
+
+.submenu a {
+    display: block;
+    padding: var(--esp-2) var(--esp-3);
+}
+
+/* ===== Grid macro: 12 colunas no <main> ===== */
+main {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap-grade);
+    max-width: var(--largura-max);
+    margin: 0 auto;
+    padding: var(--esp-5) var(--esp-3);
+    flex: 1;
+    align-content: start;
+}
+
+main>* {
+    grid-column: 1 / -1;
+}
+
+main>section {
+    margin-bottom: var(--esp-7);
+}
+
+/* ===== Grid aninhado: projetos e serviços (12 colunas) ===== */
+#o-que-fazemos,
+#escola-manguezal-vivo {
+    --span: 12;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap-grade);
+    row-gap: var(--esp-6);
+}
+
+#o-que-fazemos>h2,
+#o-que-fazemos>p,
+#escola-manguezal-vivo>h2,
+#escola-manguezal-vivo>p {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+article {
+    grid-column: span var(--span, 12);
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--esp-3);
+    border-top: 2px solid var(--cor-secundaria-escura);
+}
+
+article p {
+    margin: 0;
+}
+
+/* ===== Imagens ===== */
+figure {
+    margin: 0 0 var(--esp-3);
+}
+
+figure img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--esp-1);
+}
+
+figcaption {
+    margin-top: var(--esp-2);
+    font-size: var(--fs-1);
+    color: var(--cor-neutra-200);
+}
+
+/* ===== Voluntariado e doações ===== */
+#voluntariado,
+#doacoes {
+    padding-top: var(--esp-6);
+    border-top: 2px solid var(--cor-secundaria-escura);
+}
+
+#voluntariado a,
+button[type="submit"] {
+    display: inline-block;
+    margin-top: var(--esp-2);
+    padding: var(--esp-3) var(--esp-5);
+    background-color: var(--cor-secundaria);
+    color: var(--cor-primaria);
+    font-family: inherit;
+    font-size: var(--fs-2);
+    font-weight: 700;
+    text-decoration: none;
+    border: 0;
+    border-radius: var(--esp-1);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+#voluntariado a:hover,
+button[type="submit"]:hover {
+    background-color: var(--cor-neutra-100);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+#voluntariado a:active,
+button[type="submit"]:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+button[type="submit"]:disabled {
+    background-color: var(--cor-secundaria-escura);
+    color: var(--cor-neutra-200);
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+aside {
+    margin-top: var(--esp-3);
+    padding: var(--esp-3) var(--esp-4);
+    background-color: var(--cor-superficie);
+    border-left: 4px solid var(--cor-destaque);
+    border-radius: var(--esp-1);
+}
+
+aside h3 {
+    color: var(--cor-destaque);
+}
+
+aside p {
+    margin: 0;
+}
+
+/* ===== Formulário (cadastro.html) ===== */
+form {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+fieldset {
+    margin: 0 0 var(--esp-4);
+    padding: var(--esp-4);
+    background-color: var(--cor-superficie);
+    border: 1px solid var(--cor-secundaria-escura);
+    border-radius: var(--esp-1);
+}
+
+legend {
+    padding: 0 var(--esp-2);
+    font-size: var(--fs-3);
+    font-weight: 700;
+}
+
+label {
+    display: block;
+    margin-top: var(--esp-3);
+    margin-bottom: var(--esp-1);
+}
+
+input,
+select {
+    width: 100%;
+    padding: var(--esp-2) var(--esp-3);
+    background-color: var(--cor-primaria);
+    color: var(--cor-neutra-100);
+    font-family: inherit;
+    font-size: var(--fs-2);
+    border: 1px solid var(--cor-secundaria-escura);
+    border-radius: var(--esp-1);
+}
+
+input::placeholder {
+    color: var(--cor-neutra-200);
+    opacity: 0.7;
+}
+
+input,
+select {
+    width: 100%;
+    padding: var(--esp-2) var(--esp-3);
+    background-color: var(--cor-primaria);
+    color: var(--cor-neutra-100);
+    font-family: inherit;
+    font-size: var(--fs-2);
+    border: 2px solid var(--cor-secundaria-escura);
+    border-radius: var(--esp-1);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* erro: só depois que o usuário mexeu no campo e ele ficou inválido */
+input:user-invalid,
+select:user-invalid {
+    border-color: var(--cor-erro);
+    box-shadow: 0 0 0 3px rgba(255, 158, 158, 0.25);
+}
+
+/* sucesso: campo preenchido corretamente, também após interação */
+input:not(:placeholder-shown):user-valid,
+select:user-valid {
+    border-color: var(--cor-secundaria);
+}
+
+/* ===== Rodapé ===== */
+footer {
+    padding: var(--esp-5);
+    background-color: var(--cor-primaria-clara);
+    text-align: center;
+}
+
+footer h2 {
+    font-size: var(--fs-3);
+}
+
+footer p {
+    margin: var(--esp-1) 0;
+}
+
+footer address {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--esp-2) var(--esp-5);
+}
+
+address {
+    font-style: normal;
+}
+
+/* ===== Badges ===== */
+.badge {
+    display: inline-block;
+    padding: var(--esp-1) var(--esp-3);
+    font-size: var(--fs-1);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-radius: 999px;
+}
+
+.badge--padrao {
+    background-color: var(--cor-secundaria);
+    color: var(--cor-primaria);
+}
+
+.badge--destaque {
+    background-color: var(--cor-destaque);
+    color: var(--cor-primaria);
+}
+
+.badge--institucional {
+    background-color: var(--cor-superficie);
+    color: var(--cor-secundaria);
+    border: 1px solid var(--cor-secundaria-escura);
+}
+
+/* ===== Alertas ===== */
+.alerta {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--esp-3);
+    padding: var(--esp-3) var(--esp-4);
+    margin-bottom: var(--esp-4);
+    border-radius: var(--esp-1);
+    border-left: 4px solid;
+}
+
+.alerta__icone {
+    font-weight: 700;
+    line-height: 1;
+}
+
+.alerta--sucesso {
+    background-color: rgba(159, 216, 184, 0.15);
+    border-color: var(--cor-secundaria);
+    color: var(--cor-neutra-100);
+}
+
+.alerta--erro {
+    background-color: rgba(255, 158, 158, 0.15);
+    border-color: var(--cor-erro);
+    color: var(--cor-neutra-100);
+}
+
+.alerta--info {
+    background-color: rgba(242, 185, 80, 0.12);
+    border-color: var(--cor-destaque);
+    color: var(--cor-neutra-100);
+}
+
+/* ===== Modal ===== */
+.modal-toggle {
+    display: none;
+}
+
+.modal-fundo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal-toggle:checked ~ .modal-fundo {
+    display: flex;
+}
+
+.modal-caixa {
+    background-color: var(--cor-superficie);
+    color: var(--cor-neutra-100);
+    max-width: 420px;
+    width: 90%;
+    padding: var(--esp-5);
+    border-radius: var(--esp-1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.modal-caixa h3 {
+    margin-top: 0;
+}
+
+.modal-qrcode {
+    display: block;
+    width: 100%;
+    max-width: 220%;
+    height: auto;
+    margin: var(--esp-3) auto;
+    background-color: #fff;
+    padding: var(--esp-2);
+    border-radius: var(--esp-1);
+}
+
+.modal-fechar {
+    display: inline-block;
+    margin-top: var(--esp-3);
+    color: var(--cor-secundaria);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* ===== Toast ===== */
+.toast {
+    position: fixed;
+    bottom: var(--esp-4);
+    right: var(--esp-4);
+    display: flex;
+    align-items: center;
+    gap: var(--esp-2);
+    padding: var(--esp-3) var(--esp-4);
+    background-color: var(--cor-superficie);
+    color: var(--cor-neutra-100);
+    border-left: 4px solid var(--cor-secundaria);
+    border-radius: var(--esp-1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    z-index: 200;
+}
+
+.grupo-categoria {
+    grid-column: 1 / -1; /* ocupa a largura toda da grade, atravessando os cards abaixo */
+}
+
+.grupo-categoria__rotulo {
+    display: inline-block;
+    margin: 0;
+    padding: var(--esp-1) var(--esp-3);
+    font-size: var(--fs-1);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background-color: var(--cor-secundaria);
+    color: var(--cor-primaria);
+    border-radius: 999px;
+}
+
+.doacao-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--esp-4);
+    margin-top: var(--esp-2);
+}
+
+.doacao-info p {
+    margin: 0;
+}
+
+.btn-secundario {
+    display: inline-block;
+    padding: var(--esp-2) var(--esp-4);
+    background-color: var(--cor-secundaria);
+    color: var(--cor-primaria);
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid var(--cor-secundaria);
+    border-radius: var(--esp-1);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-secundario:hover {
+    background-color: var(--cor-neutra-100);
+    color: var(--cor-primaria);
+    border: 2px solid var(--cor-neutra-100);
+    border-radius: var(--esp-1);
+}
+
+/* =====================================================
+   BREAKPOINTS (mobile-first, em ordem crescente)
+   base (< 480px): 1 coluna; menu recolhido (hambúrguer)
+   ===================================================== */
+
+/* 0) menu mobile: ativo enquanto a tela não atinge 768px
+      (mesmo limiar do breakpoint de tablets, em max-width) */
+@media (max-width: 767px) {
+    header {
+        justify-content: flex-start;
+        /* logo e hambúrguer colados, à esquerda */
+    }
+
+    .menu-hamburguer {
+        display: block;
+    }
+
+    nav {
+        order: 3;
+        width: 100%;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        gap: 0;
+        transition: max-height 0.3s ease;
+    }
+
+    /* :checked reage ao estado do checkbox, que agora é irmão do <nav> */
+    .menu-toggle:checked~nav ul {
+        max-height: 400px;
+    }
+
+    nav ul>li {
+        width: 100%;
+        padding: var(--esp-2) 0;
+    }
+
+    .submenu {
+        display: flex;
+        position: static;
+        border: 0;
+        padding-left: var(--esp-4);
+        background-color: transparent;
+    }
+}
+
+/* 1) 480px: celulares grandes — header em linha, mais respiro */
+@media (min-width: 480px) {
+    header {
+        flex-direction: row;
+        align-items: center;
+        padding: var(--esp-3) var(--esp-5);
+    }
+
+    .menu-hamburguer {
+        align-self: center;
+    }
+
+    main {
+        padding: var(--esp-6) var(--esp-4);
+    }
+}
+
+/* 2) 768px: tablets — menu horizontal volta; projetos em 2 colunas (6 de 12) */
+@media (min-width: 768px) {
+    nav {
+        width: auto;
+    }
+
+    nav ul {
+        flex-direction: row;
+        max-height: none;
+        overflow: visible;
+        gap: var(--esp-5);
+    }
+
+    #o-que-fazemos,
+    #escola-manguezal-vivo {
+        --span: 6;
+    }
+}
+
+/* 3) 1024px: notebooks — 3 colunas (4 de 12); voluntariado e doações lado a lado */
+@media (min-width: 1024px) {
+
+    #o-que-fazemos,
+    #escola-manguezal-vivo {
+        --span: 4;
+    }
+
+    #voluntariado,
+    #doacoes {
+        grid-column: span 6;
+    }
+
+    figure img {
+        height: 240px;
+    }
+
+    form {
+        max-width: 900px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: var(--esp-4);
+        align-items: start;
+    }
+
+    form > .alerta {
+        grid-column: 1 / -1;
+    }
+
+    button[type="submit"] {
+        grid-column: 1 / -1;
+        justify-self: start;
+    }
+}
+
+/* 4) 1280px: desktops — serviços em 4 colunas (3 de 12); conteúdo mais largo */
+@media (min-width: 1280px) {
+    :root {
+        --largura-max: 1200px;
+    }
+
+    #escola-manguezal-vivo {
+        --span: 3;
+    }
+}
+
+/* 5) 1600px: telas panorâmicas — container maior e fonte base ampliada */
+@media (min-width: 1600px) {
+    :root {
+        --largura-max: 1400px;
+    }
+
+    html {
+        font-size: 112.5%;
+        /* como tudo usa rem, o site inteiro escala junto */
+    }
+}
